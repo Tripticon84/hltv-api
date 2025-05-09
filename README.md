@@ -1,8 +1,8 @@
-# HLTV API
+# 🧠 HLTV API - Complete Technical Overview
 
-A RESTful API wrapper for the HLTV (Half-Life TV) platform, providing easy access to CS:GO match data, results, and statistics.
+A robust RESTful API wrapper built with Express.js and TypeScript to provide structured access to CS:GO match data via HLTV, including statistics, teams, players, and event insights.
 
-## Features
+## 👀 Features
 
 - Match results and statistics
 - Team and player information
@@ -13,12 +13,33 @@ A RESTful API wrapper for the HLTV (Half-Life TV) platform, providing easy acces
 - Error handling with detailed responses
 - TypeScript support
 
-## Prerequisites
+## 🔧 Technologies Used
+
+- TypeScript
+- Express.js
+- HLTV API
+- CORS
+- dotenv
+
+## 📁 Project Structure
+
+```
+hltv-api/
+├── src/
+│   ├── routes/        # API route definitions
+│   ├── services/      # Business logic and HLTV integration
+│   └── index.ts       # Application entry point
+├── package.json
+├── tsconfig.json
+└── README.md
+```
+
+## 🚀 Prerequisites
 
 - Node.js (v14 or higher)
-- Yarn or npm package manager
+- Yarn, npm or pnpm package manager
 
-## Installation
+## 🐱‍👤 Installation
 
 1. Clone the repository:
 ```bash
@@ -35,7 +56,7 @@ npm install
 pnpm install
 ```
 
-## Development
+## 😎 Development
 
 To start the development server with hot-reload:
 
@@ -49,7 +70,7 @@ pnpm dev
 
 The server will start on the default port (check your environment variables).
 
-## API Endpoints
+## 🔌 API Endpoints
 
 ### Match Endpoints
 
@@ -558,7 +579,7 @@ Retrieves player rankings.
 }
 ```
 
-## Error Handling
+## 🔒 Error Handling
 
 The API returns appropriate HTTP status codes and error messages:
 
@@ -573,32 +594,11 @@ Error responses include a timestamp and descriptive message:
 }
 ```
 
-## Technologies Used
-
-- TypeScript
-- Express.js
-- HLTV API
-- CORS
-- dotenv
-
-## Project Structure
-
-```
-hltv-api/
-├── src/
-│   ├── routes/        # API route definitions
-│   ├── services/      # Business logic and HLTV integration
-│   └── index.ts       # Application entry point
-├── package.json
-├── tsconfig.json
-└── README.md
-```
-
-## License
+## 📝 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Contributing
+## 📦 Contributing
 
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
@@ -606,6 +606,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## Support
+## ❕ Support
 
 If you encounter any issues or have questions, please open an issue in the GitHub repository.
