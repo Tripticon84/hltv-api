@@ -31,6 +31,8 @@ cd hltv-api
 yarn install
 # or
 npm install
+# or
+pnpm install
 ```
 
 ## Development
@@ -41,6 +43,8 @@ To start the development server with hot-reload:
 yarn dev
 # or
 npm run dev
+# or
+pnpm dev
 ```
 
 The server will start on the default port (check your environment variables).
