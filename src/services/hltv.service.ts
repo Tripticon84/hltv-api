@@ -1,4 +1,4 @@
-import HLTV from 'hltv';
+import HLTV from '../lib';
 
 export class HltvService {
     // Match related methods

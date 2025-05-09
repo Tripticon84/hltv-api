@@ -11,7 +11,7 @@ import {
 
 const router = Router();
 
-// Match routes
+// Match routes // Fix this route
 router.get('/matches', async (req: Request, res: Response) => {
     try {
         const matches = await hltvService.getMatches();
@@ -50,6 +50,7 @@ router.get('/matches/:id', async (req: Request, res: Response) => {
     }
 });
 
+// Fix this route
 router.get('/results', async (req: Request, res: Response) => {
     try {
         const results = await hltvService.getResults({
@@ -130,7 +131,7 @@ router.get('/teams/name/:name', async (req: Request, res: Response) => {
     }
 });
 
-// Player routes
+// Player routes // Fix this route
 router.get('/players/:id', async (req: Request, res: Response) => {
     try {
         const player = await hltvService.getPlayerById(Number(req.params.id));
@@ -189,6 +190,7 @@ router.get('/events/:id', async (req: Request, res: Response) => {
     }
 });
 
+// Fix this route
 router.get('/events', async (req: Request, res: Response) => {
     try {
         const events = await hltvService.getEvents();
@@ -208,7 +210,7 @@ router.get('/events', async (req: Request, res: Response) => {
     }
 });
 
-// News route
+// News route // Fix this route
 router.get('/news', (async (req: Request, res: Response) => {
     try {
         const { year, month, eventIds } = req.query;
