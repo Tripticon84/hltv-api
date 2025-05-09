@@ -129,9 +129,13 @@ export class HltvService {
     }
 
     // News related methods
-    async getNews() {
+    async getNews(params: {
+        year?: 2005 | 2006 | 2007 | 2008 | 2009 | 2010 | 2011 | 2012 | 2013 | 2014 | 2015 | 2016 | 2017 | 2018 | 2019 | 2020 | 2021 | 2022;
+        month?: 'january' | 'february' | 'march' | 'april' | 'may' | 'june' | 'july' | 'august' | 'september' | 'october' | 'november' | 'december';
+        eventIds?: number[];
+    } = {}) {
         try {
-            const news = await HLTV.getNews();
+            const news = await HLTV.getNews(params);
             return news;
         } catch (error) {
             if (error instanceof Error) {
@@ -142,9 +146,13 @@ export class HltvService {
     }
 
     // Rankings related methods
-    async getTeamRanking() {
+    async getTeamRanking(params: {
+        year?: 2015 | 2016 | 2017 | 2018 | 2019 | 2020 | 2021 | 2022;
+        month?: 'january' | 'february' | 'march' | 'april' | 'may' | 'june' | 'july' | 'august' | 'september' | 'october' | 'november' | 'december';
+        day?: number;
+    } = {}) {
         try {
-            const ranking = await HLTV.getTeamRanking();
+            const ranking = await HLTV.getTeamRanking(params);
             return ranking;
         } catch (error) {
             if (error instanceof Error) {
@@ -154,9 +162,18 @@ export class HltvService {
         }
     }
 
-    async getPlayerRanking() {
+    async getPlayerRanking(params: {
+        startDate?: string;
+        endDate?: string;
+        matchType?: MatchType;
+        rankingFilter?: RankingFilter;
+        maps?: GameMap[];
+        minMapCount?: number;
+        countries?: string[];
+        bestOfX?: BestOfFilter;
+    } = {}) {
         try {
-            const ranking = await HLTV.getPlayerRanking();
+            const ranking = await HLTV.getPlayerRanking(params);
             return ranking;
         } catch (error) {
             if (error instanceof Error) {
@@ -177,7 +194,40 @@ export type Player = Awaited<ReturnType<typeof HLTV.getPlayer>>;
 export type Event = Awaited<ReturnType<typeof HLTV.getEvent>>;
 
 export enum BestOfFilter {
-    'BO1' = 'BestOf1',
-    'BO3' = 'BestOf3',
-    'BO5' = 'BestOf5'
+    'BO1' = "BestOf1",
+    'BO3' = "BestOf3",
+    'BO5' = "BestOf5"
 };
+
+export enum MatchType {
+    LAN = "Lan",
+    Online = "Online",
+    BigEvents = "BigEvents",
+    Majors = "Majors"
+}
+
+export enum RankingFilter {
+    Top5 = "Top5",
+    Top10 = "Top10",
+    Top20 = "Top20",
+    Top30 = "Top30",
+    Top50 = "Top50"
+}
+
+export enum GameMap {
+    TBA = "tba",
+    Train = "de_train",
+    Cobblestone = "de_cbble",
+    Inferno = "de_inferno",
+    Cache = "de_cache",
+    Mirage = "de_mirage",
+    Overpass = "de_overpass",
+    Dust2 = "de_dust2",
+    Nuke = "de_nuke",
+    Tuscan = "de_tuscan",
+    Vertigo = "de_vertigo",
+    Season = "de_season",
+    Ancient = "de_ancient",
+    Anubis = "de_anubis",
+    Default = "default"
+}

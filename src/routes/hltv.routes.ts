@@ -1,7 +1,8 @@
 import { 
     Router, 
     Request, 
-    Response 
+    Response,
+    RequestHandler 
 } from 'express';
 
 import { 
@@ -207,10 +208,47 @@ router.get('/events', async (req: Request, res: Response) => {
     }
 });
 
-// News route // Access denied Cloudflare
-router.get('/news', async (req: Request, res: Response) => {
+// News route
+router.get('/news', (async (req: Request, res: Response) => {
     try {
-        const news = await hltvService.getNews();
+        const { year, month, eventIds } = req.query;
+        
+        const yearNumber = year ? Number(year) : undefined;
+        
+        const eventIdsArray = eventIds 
+            ? (Array.isArray(eventIds) 
+                ? eventIds.map(id => Number(id))
+                : [Number(eventIds)])
+            : undefined;
+
+        if (yearNumber && (yearNumber < 2005 || yearNumber > 2022)) {
+            return res.status(400).json({
+                error: 'Year must be between 2005 and 2022',
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        const validMonths = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+        if (month && typeof month === 'string' && !validMonths.includes(month.toLowerCase())) {
+            return res.status(400).json({
+                error: 'Invalid month provided',
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        if ((yearNumber && !month) || (!yearNumber && month)) {
+            return res.status(400).json({
+                error: 'Both year and month must be provided together',
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        const news = await hltvService.getNews({
+            year: yearNumber as any,
+            month: month?.toString().toLowerCase() as any,
+            eventIds: eventIdsArray
+        });
+        
         res.json(news);
     } catch (error) {
         if (error instanceof Error) {
@@ -225,31 +263,43 @@ router.get('/news', async (req: Request, res: Response) => {
             });
         }
     }
-});
+}) as RequestHandler);
 
 // Ranking routes // Access denied Cloudflare
-router.get('/ranking/teams', async (req: Request, res: Response) => {
+router.get('/ranking/teams', (async (req: Request, res: Response) => {
     try {
-        const ranking = await hltvService.getTeamRanking();
-        res.json(ranking);
-    } catch (error) {
-        if (error instanceof Error) {
-            res.status(500).json({ 
-                error: error.message,
-                timestamp: new Date().toISOString()
-            });
-        } else {
-            res.status(500).json({ 
-                error: 'An unexpected error occurred',
-                timestamp: new Date().toISOString()
-            });
-        }
-    }
-});
+        const { year, month, day } = req.query;
+        
+        const yearNumber = year ? Number(year) : undefined;
+        const dayNumber = day ? Number(day) : undefined;
 
-router.get('/ranking/players', async (req: Request, res: Response) => {
-    try {
-        const ranking = await hltvService.getPlayerRanking();
+        if (yearNumber && (yearNumber < 2015 || yearNumber > 2022)) {
+            return res.status(400).json({
+                error: 'Year must be between 2015 and 2022',
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        const validMonths = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+        if (month && typeof month === 'string' && !validMonths.includes(month.toLowerCase())) {
+            return res.status(400).json({
+                error: 'Invalid month provided',
+                timestamp: new Date().toISOString()
+            });
+        }
+        if (dayNumber && (dayNumber < 1 || dayNumber > 31)) {
+            return res.status(400).json({
+                error: 'Day must be between 1 and 31',
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        const ranking = await hltvService.getTeamRanking({
+            year: yearNumber as any,
+            month: month?.toString().toLowerCase() as any,
+            day: dayNumber
+        });
+        
         res.json(ranking);
     } catch (error) {
         if (error instanceof Error) {
@@ -264,6 +314,50 @@ router.get('/ranking/players', async (req: Request, res: Response) => {
             });
         }
     }
-});
+}) as RequestHandler);
+
+router.get('/ranking/players', (async (req: Request, res: Response) => {
+    try {
+        const { 
+            startDate, 
+            endDate, 
+            matchType, 
+            rankingFilter, 
+            maps, 
+            minMapCount, 
+            countries, 
+            bestOfX 
+        } = req.query;
+
+        // Convert arrays from query string
+        const mapsArray = maps ? (Array.isArray(maps) ? maps : [maps]).map(map => map.toString()) : undefined;
+        const countriesArray = countries ? (Array.isArray(countries) ? countries : [countries]).map(country => country.toString()) : undefined;
+
+        const ranking = await hltvService.getPlayerRanking({
+            startDate: startDate?.toString(),
+            endDate: endDate?.toString(),
+            matchType: matchType?.toString() as any,
+            rankingFilter: rankingFilter?.toString() as any,
+            maps: mapsArray as any,
+            minMapCount: minMapCount ? Number(minMapCount) : undefined,
+            countries: countriesArray,
+            bestOfX: bestOfX?.toString() as any
+        });
+        
+        res.json(ranking);
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).json({ 
+                error: error.message,
+                timestamp: new Date().toISOString()
+            });
+        } else {
+            res.status(500).json({ 
+                error: 'An unexpected error occurred',
+                timestamp: new Date().toISOString()
+            });
+        }
+    }
+}) as RequestHandler);
 
 export default router; 
