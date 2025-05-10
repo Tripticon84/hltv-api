@@ -110,17 +110,12 @@ export const getResults =
                                 const resultScoreElement = el.find('.result-score, .score-won, .score-lost');
                                 const resultScoreText = resultScoreElement.text().trim();
                                 
-                                console.log(`Processing match ${id}:`);
-                                console.log(`- Result score element exists: ${resultScoreElement.length > 0}`);
-                                console.log(`- Result score text: "${resultScoreText}"`);
-                                
                                 if (!resultScoreText) {
                                     console.warn(`No result score found for match ${id}`);
                                     return null;
                                 }
 
                                 const scoreParts = resultScoreText.split(' - ');
-                                console.log(`- Score parts: ${JSON.stringify(scoreParts)}`);
                                 
                                 if (scoreParts.length !== 2) {
                                     console.warn(`Invalid score format for match ${id}: ${resultScoreText}`);

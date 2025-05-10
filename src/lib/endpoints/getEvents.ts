@@ -17,108 +17,95 @@ import {
     fetchPage
 } from '../utils/fetch';
 
-import {
-    GetEventsArguments,
-    EventPreview
-} from '../types/getEvents';
+export const getEvents = (config: HLTVConfig) =>
+    async () => {
+        const $ = HLTVScraper(
+            await fetchPage(
+                `https://www.hltv.org/events`,
+                config.loadPage
+            )
+        );
 
-export const getEvents = (config: HLTVConfig) => async (options: GetEventsArguments = {}): Promise<EventPreview[]> => {
-    const query = stringify({
-        ...(options.eventType ? { eventType: options.eventType } : {}),
-        ...(options.prizePoolMin ? { prizeMin: options.prizePoolMin } : {}),
-        ...(options.prizePoolMax ? { prizeMax: options.prizePoolMax } : {}),
-        ...(options.attendingTeamIds
-            ? { team: options.attendingTeamIds }
-            : {}),
-        ...(options.attendingPlayerIds
-            ? { player: options.attendingPlayerIds }
-            : {})
-    });
+        const featuredOngoingEvents = $('a.ongoing-event').toArray().map((el) => {
+            const href = el.attr('href');
+            return href ? getIdAt(2, href) : null;
+        });
 
-    const $ = HLTVScraper(
-        await fetchPage(
-            `https://www.hltv.org/events?${query}`,
-            config.loadPage
-        )
-    );
+        const ongoingEvents = $('.tab-content[id="ALL"] a.ongoing-event').toArray().map((el) => {
+            const id = el.attrThen('href', getIdAt(2))!;
+            const name = el.find('.event-name-small .text-ellipsis').text();
 
-    const featuredOngoingEvents = $('.tab-content[id="FEATURED"] a.ongoing-event').toArray().map((el) => el.attrThen('href', getIdAt(2)));
+            const dateStart = el.find('tr.eventDetails span[data-unix]').first().numFromAttr('data-unix')!;
+            const dateEnd = el.find('tr.eventDetails span[data-unix]').last().numFromAttr('data-unix')!;
 
-    const ongoingEvents = $('.tab-content[id="ALL"] a.ongoing-event').toArray().map((el) => {
-        const id = el.attrThen('href', getIdAt(2))!;
-        const name = el.find('.event-name-small .text-ellipsis').text();
+            const featured = featuredOngoingEvents.includes(id);
 
-        const dateStart = el.find('tr.eventDetails span[data-unix]').first().numFromAttr('data-unix')!;
-        const dateEnd = el.find('tr.eventDetails span[data-unix]').last().numFromAttr('data-unix')!;
+            return {
+                id,
+                name,
+                dateStart,
+                dateEnd,
+                featured
+            };
+        });
 
-        const featured = featuredOngoingEvents.includes(id);
+        const bigUpcomingEvents = $('a.big-event').toArray().map((el) => {
+            const id = el.attrThen('href', getIdAt(2))!;
+            const name = el.find('.big-event-name').text();
 
-        return {
-            id,
-            name,
-            dateStart,
-            dateEnd,
-            featured
-        };
-    });
+            const dateStart = el.find('.additional-info .col-date span[data-unix]').first().numFromAttr('data-unix')!;
+            const dateEnd = el.find('.additional-info .col-date span[data-unix]').last().numFromAttr('data-unix')!;
 
-    const bigUpcomingEvents = $('a.big-event').toArray().map((el) => {
-        const id = el.attrThen('href', getIdAt(2))!;
-        const name = el.find('.big-event-name').text();
+            const locationName = el.find('.big-event-location').text();
 
-        const dateStart = el.find('.additional-info .col-date span[data-unix]').first().numFromAttr('data-unix')!;
-        const dateEnd = el.find('.additional-info .col-date span[data-unix]').last().numFromAttr('data-unix')!;
+            const location = locationName !== 'TBA' ? {
+                name: locationName,
+                code: el.find('.location-top-teams img.flag').attr('src').split('/').pop()!.split('.')[0]
+            } : undefined;
 
-        const locationName = el.find('.big-event-location').text();
+            const prizePool = el.find('.additional-info tr').first().find('td').eq(1).text();
 
-        const location = locationName !== 'TBA' ? {
-            name: locationName,
-            code: el.find('.location-top-teams img.flag').attr('src').split('/').pop()!.split('.')[0]
-        } : undefined;
+            const numberOfTeams = parseNumber(el.find('.additional-info tr').first().find('td').eq(2).text());
 
-        const prizePool = el.find('.additional-info tr').first().find('td').eq(1).text();
+            return {
+                id,
+                name,
+                dateStart,
+                dateEnd,
+                location,
+                prizePool,
+                numberOfTeams,
+                featured: true
+            };
+        });
 
-        const numberOfTeams = parseNumber(el.find('.additional-info tr').first().find('td').eq(2).text());
+        const smallUpcomingEvents = $('a.small-event').toArray().map((el) => {
+            const id = el.attrThen('href', getIdAt(2))!;
+            const name = el.find('.table tr').first().find('td').first().find('.text-ellipsis').text();
 
-        return {
-            id,
-            name,
-            dateStart,
-            dateEnd,
-            location,
-            prizePool,
-            numberOfTeams,
-            featured: true
-        };
-    });
+            const dateStart = el.find('td span[data-unix]').first().numFromAttr('data-unix')!;
+            const dateEnd = el.find('td span[data-unix]').last().numFromAttr('data-unix')!;
 
-    const smallUpcomingEvents = $('a.small-event').toArray().map((el) => {
-        const id = el.attrThen('href', getIdAt(2))!;
-        const name = el.find('.table tr').first().find('td').first().find('.text-ellipsis').text();
+            const location = {
+                name: el.find('.smallCountry .col-desc').text().replace(' | ', ''),
+                code: el.find('.smallCountry img.flag').attr('src').split('/').pop()!.split('.')[0]
+            };
 
-        const dateStart = el.find('td span[data-unix]').first().numFromAttr('data-unix')!;
-        const dateEnd = el.find('td span[data-unix]').last().numFromAttr('data-unix')!;
+            const prizePool = el.find('.prizePoolEllipsis').text();
 
-        const location = {
-            name: el.find('.smallCountry .col-desc').text().replace(' | ', ''),
-            code: el.find('.smallCountry img.flag').attr('src').split('/').pop()!.split('.')[0]
-        };
+            const numberOfTeams = parseNumber(el.find('.prizePoolEllipsis').prev().text());
 
-        const prizePool = el.find('.prizePoolEllipsis').text();
+            return {
+                id,
+                name,
+                dateStart,
+                dateEnd,
+                location,
+                prizePool,
+                numberOfTeams,
+                featured: false
+            };
+        });
 
-        const numberOfTeams = parseNumber(el.find('.prizePoolEllipsis').prev().text());
-
-        return {
-            id,
-            name,
-            dateStart,
-            dateEnd,
-            location,
-            prizePool,
-            numberOfTeams,
-            featured: false
-        };
-    });
-
-    return ongoingEvents.concat(bigUpcomingEvents).concat(smallUpcomingEvents);
-};
+        return ongoingEvents.concat(bigUpcomingEvents).concat(smallUpcomingEvents);
+    };

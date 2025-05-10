@@ -1,5 +1,3 @@
-import * as cheerio from 'cheerio';
-
 import { 
     randomUUID 
 } from 'crypto';
@@ -10,15 +8,25 @@ export const generateRandomSuffix = () => {
 
 export const percentageToDecimalOdd = (odd: number): number => parseFloat(((1 / odd) * 100).toFixed(2));
 
-export function getIdAt(index: number, href: string): number | undefined;
-export function getIdAt(index: number): (href: string) => number | undefined;
 export function getIdAt(index?: number, href?: string): any {
-    switch (arguments.length) {
-        case 1:
-            return (href: string) => getIdAt(index!, href);
-        default:
-            return parseNumber(href!.split('/')[index!]);
+    if (arguments.length === 1) {
+        return (href: string) => getIdAt(index!, href);
     }
+
+    if (!href) {
+        throw new Error('href parameter is required');
+    }
+
+    if (typeof index !== 'number') {
+        throw new Error('index parameter must be a number');
+    }
+
+    const parts = href.split('/');
+    if (index >= parts.length) {
+        throw new Error(`Index ${index} is out of bounds for the given href`);
+    }
+
+    return parseNumber(parts[index]);
 }
 
 export const notNull = <T>(x: T | null): x is T => x !== null;
