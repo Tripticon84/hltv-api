@@ -11,7 +11,7 @@ import {
 
 const router = Router();
 
-// Match routes
+// Match routes // Fix
 router.get('/matches', async (req: Request, res: Response) => {
     try {
         const matches = await hltvService.getMatches();
@@ -110,7 +110,7 @@ router.get('/teams/stats/:id', async (req: Request, res: Response) => {
         }
     }
 });
-
+// Fix
 router.get('/teams/name/:name', async (req: Request, res: Response) => {
     try {
         const team = await hltvService.getTeamByName(req.params.name);
@@ -265,7 +265,7 @@ router.get('/news', (async (req: Request, res: Response) => {
     }
 }) as RequestHandler);
 
-// Ranking routes // Access denied Cloudflare
+// Ranking routes
 router.get('/ranking/teams', (async (req: Request, res: Response) => {
     try {
         const { year, month, day } = req.query;
