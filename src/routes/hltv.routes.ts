@@ -110,7 +110,7 @@ router.get('/teams/stats/:id', async (req: Request, res: Response) => {
         }
     }
 });
-// Fix
+
 router.get('/teams/name/:name', async (req: Request, res: Response) => {
     try {
         const team = await hltvService.getTeamByName(req.params.name);
@@ -329,7 +329,6 @@ router.get('/ranking/players', (async (req: Request, res: Response) => {
             bestOfX 
         } = req.query;
 
-        // Convert arrays from query string
         const mapsArray = maps ? (Array.isArray(maps) ? maps : [maps]).map(map => map.toString()) : undefined;
         const countriesArray = countries ? (Array.isArray(countries) ? countries : [countries]).map(country => country.toString()) : undefined;
 

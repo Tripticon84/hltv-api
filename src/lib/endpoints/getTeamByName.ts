@@ -10,17 +10,27 @@ import {
     getTeam
 } from './getTeam';
 
+import {
+    formatTeamName
+} from '../utils/formatters';
+
 export const getTeamByName =
     (config: HLTVConfig) =>
         async ({ name }: { name: string }): Promise<FullTeam> => {
-            const pageContent = JSON.parse(
-                await config.loadPage!(`https://www.hltv.org/search?term=${name}`)
-            )
-            const firstResult = pageContent[0].teams[0]
+            const formattedName = formatTeamName(name);
+            const pageContent = await config.loadPage!(`https://www.hltv.org/search?term=${formattedName}`);
 
-            if (!firstResult) {
-                throw new Error(`Team ${name} not found`)
+            const jsonMatch = pageContent.match(/<pre>(\[.*?\])<\/pre>/s);
+            if (!jsonMatch) {
+                throw new Error(`Failed to parse search results for team ${name}`);
             }
 
-            return getTeam(config)({ id: firstResult.id })
+            const searchResults = JSON.parse(jsonMatch[1]);
+            const firstTeam = searchResults[0]?.teams?.[0];
+
+            if (!firstTeam) {
+                throw new Error(`Team ${name} not found`);
+            }
+
+            return getTeam(config)({ id: firstTeam.id });
         }
