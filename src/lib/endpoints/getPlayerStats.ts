@@ -86,7 +86,7 @@ export const getPlayerStats =
                 $('.SummaryTeamname').text() !== 'No team'
                     ? {
                         name: $('.SummaryTeamname a').text(),
-                        id: $('.SummaryTeamname a').attrThen('href', getIdAt(3))
+                        id: Number($('.SummaryTeamname a').attrThen('href', getIdAt(3)))
                     }
                     : undefined
 
@@ -162,26 +162,26 @@ export const getPlayerStats =
                         .map(Number)
 
                     return {
-                        mapStatsId: el
+                        mapStatsId: Number(el
                             .find('td')
                             .first()
                             .find('a')
-                            .attrThen('href', getIdAt(4))!,
+                            .attrThen('href', getIdAt(4))!),
                         date: el.find('.time').numFromAttr('data-unix')!,
                         team1: {
-                            id: el
+                            id: Number(el
                                 .find('td')
                                 .eq(1)
                                 .find('.gtSmartphone-only a')
-                                .attrThen('href', getIdAt(3)),
+                                .attrThen('href', getIdAt(3))),
                             name: el.find('td').eq(1).find('a span').text()
                         },
                         team2: {
-                            id: el
+                            id: Number(el
                                 .find('td')
                                 .eq(2)
                                 .find('.gtSmartphone-only a')
-                                .attrThen('href', getIdAt(3)),
+                                .attrThen('href', getIdAt(3))),
                             name: el.find('td').eq(2).find('a span').text()
                         },
                         map: fromMapSlug(el.find('.statsMapPlayed').text()),

@@ -52,7 +52,7 @@ export const getPlayerRanking =
             return $('.player-ratings-table tbody tr')
                 .toArray()
                 .map((el) => {
-                    const id = el.find('.playerCol a').attrThen('href', getIdAt(3))
+                    const id = Number(el.find('.playerCol a').attrThen('href', getIdAt(3)))
                     const name = el.find('.playerCol a').text()
                     const player = { name, id }
 
@@ -60,7 +60,7 @@ export const getPlayerRanking =
                         .find('.teamCol a')
                         .toArray()
                         .map((teamEl) => ({
-                            id: teamEl.attrThen('href', getIdAt(3)),
+                            id: Number(teamEl.attrThen('href', getIdAt(3))),
                             name: teamEl.find('img').attr('title')
                         }))
 

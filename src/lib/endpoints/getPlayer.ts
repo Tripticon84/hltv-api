@@ -67,7 +67,7 @@ export const getPlayer =
         if (hasTeam) {
             team = {
                 name: $('.playerTeam a').trimText()!,
-                id: $('.playerTeam a').attrThen('href', getIdAt(2))
+                id: Number($('.playerTeam a').attrThen('href', getIdAt(2)))
             }
         }
 
@@ -98,16 +98,16 @@ export const getPlayer =
                 place: el.find('.achievement').text(),
                 event: {
                     name: el.find('.tournament-name-cell a').text(),
-                    id: el
+                    id: Number(el
                         .find('.tournament-name-cell a')
-                        .attrThen('href', getIdAt(2))
+                        .attrThen('href', getIdAt(2)))
                 }
             }))
 
         const teams = $('.team-breakdown .team')
             .toArray()
             .map((el) => ({
-                id: el.find('.team-name-cell a').attrThen('href', getIdAt(2)),
+                id: Number(el.find('.team-name-cell a').attrThen('href', getIdAt(2))),
                 name: el.find('.team-name').text(),
                 startDate: el
                     .find('.time-period-cell [data-unix]')
@@ -121,7 +121,7 @@ export const getPlayer =
                     .find('.trophy-row-trophy a')
                     .toArray()
                     .map((trophyEl) => ({
-                        id: trophyEl.attrThen('href', getIdAt(2)),
+                        id: Number(trophyEl.attrThen('href', getIdAt(2))),
                         name: trophyEl.find('img').attr('title')
                     }))
             }))
