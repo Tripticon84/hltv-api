@@ -12,6 +12,12 @@ A robust RESTful API wrapper built with Express.js and TypeScript to provide str
 - Live and upcoming matches
 - Error handling with detailed responses
 - TypeScript support
+- Date validation for match queries
+- Team name formatting
+- Comprehensive match statistics
+- Player performance metrics
+- Event prize distribution
+- Team rankings and history
 
 ## 🔧 Technologies Used
 
@@ -20,15 +26,21 @@ A robust RESTful API wrapper built with Express.js and TypeScript to provide str
 - HLTV API
 - CORS
 - dotenv
+- Cheerio (for HTML parsing)
 
 ## 📁 Project Structure
 
 ```
 hltv-api/
 ├── src/
-│   ├── routes/        # API route definitions
-│   ├── services/      # Business logic and HLTV integration
-│   └── index.ts       # Application entry point
+│   ├── lib/
+│   │   ├── config/         # Configuration settings
+│   │   ├── endpoints/      # HLTV API endpoint implementations
+│   │   ├── types/         # TypeScript type definitions
+│   │   └── utils/         # Utility functions
+│   ├── routes/            # API route definitions
+│   ├── services/          # Business logic and HLTV integration
+│   └── index.ts           # Application entry point
 ├── package.json
 ├── tsconfig.json
 └── README.md
@@ -77,18 +89,54 @@ The server will start on the default port (check your environment variables).
 #### GET /matches
 Retrieves all matches.
 
+**Query Parameters:**
+- `selectedDate`: Date in YYYY-MM-DD format (optional)
+
 **Response:**
 ```json
 {
-  "matches": [
+  "liveMatches": [
     {
       "id": 12345,
-      "team1": "Team A",
-      "team2": "Team B",
-      "event": "Event Name",
-      "date": "2024-03-20T15:00:00Z",
+      "team1": {
+        "name": "Team A",
+        "logo": "https://example.com/logo.png"
+      },
+      "team2": {
+        "name": "Team B",
+        "logo": "https://example.com/logo.png"
+      },
+      "event": {
+        "id": 100,
+        "name": "Event Name"
+      },
+      "date": 1647781200000,
       "format": "bo3",
-      "status": "upcoming"
+      "stars": 5
+    }
+  ],
+  "upcomingMatchesByChampionship": [
+    {
+      "event": {
+        "id": 100,
+        "name": "Event Name"
+      },
+      "matches": [
+        {
+          "id": 12345,
+          "team1": {
+            "name": "Team A",
+            "logo": "https://example.com/logo.png"
+          },
+          "team2": {
+            "name": "Team B",
+            "logo": "https://example.com/logo.png"
+          },
+          "date": 1647781200000,
+          "format": "bo3",
+          "stars": 5
+        }
+      ]
     }
   ]
 }
