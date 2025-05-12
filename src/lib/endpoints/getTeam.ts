@@ -47,9 +47,9 @@ export const getTeam =
                             '.playersBox-playernick-image .playersBox-playernick .text-ellipsis'
                         )
                         .text(),
-                    id: el
+                    id: Number(el
                         .find('.playersBox-playernick-image')
-                        .attrThen('href', getIdAt(2)),
+                        .attrThen('href', getIdAt(2))),
                     timeOnTeam: el.find('td').eq(2).trimText()!,
                     mapsPlayed: el.find('td').eq(3).numFromText()!,
                     type: getPlayerType(el.find('.player-status').text())!
@@ -58,9 +58,9 @@ export const getTeam =
                     ...($('.coach-table').exists()
                         ? [
                             {
-                                id: $(
+                                id: Number($(
                                     '.coach-table .playersBox-playernick-image'
-                                ).attrThen('href', getIdAt(2)),
+                                ).attrThen('href', getIdAt(2))),
                                 name: $(
                                     '.coach-table .playersBox-playernick-image .playersBox-playernick .text-ellipsis'
                                 ).text(),

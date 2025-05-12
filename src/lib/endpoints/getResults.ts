@@ -73,10 +73,10 @@ export const getResults =
                         .toArray()
                         .map((el) => {
                             try {
-                                const id = el
+                                const id = Number(el
                                     .children()
                                     .first()
-                                    .attrThen('href', getIdAt(2))!
+                                    .attrThen('href', getIdAt(2)))
 
                                 if (featuredResults.includes(id)) {
                                     featuredResults = featuredResults.filter(

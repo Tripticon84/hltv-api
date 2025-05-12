@@ -57,7 +57,7 @@ export const getTeamStats =
             )
 
             const currentRosterQuery = stringify({
-                lineup: currentLineup.map((x) => x.id!),
+                lineup: currentLineup.map((x) => Number(x.id)),
                 minLineupMatch: 0
             })
 
@@ -147,16 +147,16 @@ export const getTeamStats =
                         },
                         team1: currentTeam,
                         team2: {
-                            id: el
+                            id: Number(el
                                 .find('img.flag')
                                 .parent()
-                                .attrThen('href', getIdAt(3)),
+                                .attrThen('href', getIdAt(3))),
                             name: el.find('img.flag').parent().trimText()!
                         },
                         map: fromMapName(el.find('.statsMapPlayed').text()),
-                        mapStatsId: el
+                        mapStatsId: Number(el
                             .find('.time a')
-                            .attrThen('href', getIdAt(4))!,
+                            .attrThen('href', getIdAt(4))),
                         result: {
                             team1: Number(team1Result),
                             team2: Number(team2Result)
@@ -243,7 +243,7 @@ function getPlayersByContainer(container: HLTVPageElement) {
         .find('.image-and-label')
         .toArray()
         .map((el) => ({
-            id: el.attrThen('href', getIdAt(3)),
+            id: Number(el.attrThen('href', getIdAt(3))),
             name: el.find('.text-ellipsis').text()
         }))
 }
