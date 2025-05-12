@@ -11,34 +11,38 @@ import {
 
 const router = Router();
 
-// Match routes // Fix
+// Match routes
 router.get('/matches', async (req: Request, res: Response) => {
     try {
         const { selectedDate } = req.query;
 
         if (selectedDate && typeof selectedDate !== 'string') {
-            res.status(400).json({
-                error: 'Invalid date format',
-                timestamp: new Date().toISOString()
-            });
-        };
+            throw new Error('Invalid date format');
+        }
+
+        if (selectedDate) {
+            const dateStr = selectedDate as string;
+            const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+            if (!dateRegex.test(dateStr)) {
+                throw new Error('Date must be in YYYY-MM-DD format');
+            }
+
+            const date = new Date(dateStr);
+            if (isNaN(date.getTime())) {
+                throw new Error('Invalid date provided');
+            }
+        }
 
         const matches = await hltvService.getMatches({
             selectedDate: selectedDate?.toString()
         });
         res.json(matches);
     } catch (error) {
-        if (error instanceof Error) {
-            res.status(500).json({ 
-                error: error.message,
-                timestamp: new Date().toISOString()
-            });
-        } else {
-            res.status(500).json({ 
-                error: 'An unexpected error occurred',
-                timestamp: new Date().toISOString()
-            });
-        }
+        console.error('Error fetching matches:', error);
+        res.status(400).json({
+            error: error instanceof Error ? error.message : 'Invalid request',
+            timestamp: new Date().toISOString()
+        });
     }
 });
 

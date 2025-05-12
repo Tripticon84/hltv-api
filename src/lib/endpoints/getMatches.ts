@@ -77,7 +77,6 @@ function getLiveMatches($: any, events: any[]) {
 function getUpcomingMatches($: any, events: any) {
     return $('.matches-event-wrapper').toArray().slice(1).map((champEl: any) => {
         const matches = champEl.find('.match-wrapper[live!="true"]').toArray().map((el: any) => parseMatch(el, events));
-        console.log(matches[0]);
         const event = matches.length > 0 && matches[0].event
             ? { id: matches[0].event.id, name: matches[0].event.name }
             : { id: null, name: '' };
