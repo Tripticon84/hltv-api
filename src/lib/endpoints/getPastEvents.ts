@@ -63,7 +63,7 @@ export const getPastEvents =
                     ...$('a.small-event')
                         .toArray()
                         .map((el) => {
-                            const id = el.attrThen('href', getIdAt(2))!
+                            const id = Number(el.attrThen('href', getIdAt(2)))
                             const name = el
                                 .find('.table tr')
                                 .first()
