@@ -176,7 +176,7 @@ function getVetoes($: HLTVPage, team1?: Team, team2?: Team): Veto[] {
 function getEvent($: HLTVPage): Event {
     return {
         name: $('.timeAndEvent .event a').text(),
-        id: $('.timeAndEvent .event a').attrThen('href', getIdAt(2))
+        id: Number($('.timeAndEvent .event a').attrThen('href', getIdAt(2)))
     };
 }
 
@@ -392,19 +392,19 @@ function getHighlightedPlayers($: HLTVPage) {
                 name: $(
                     '.lineups-compare-left .lineups-compare-playername'
                 ).text(),
-                id: $('.lineups-compare-left .lineups-compare-player-links a')
+                id: Number($('.lineups-compare-left .lineups-compare-player-links a')
                     .first()
-                    .attrThen('href', getIdAt(2))
+                    .attrThen('href', getIdAt(2)))
             },
             team2: {
                 name: $(
                     '.lineups-compare-right .lineups-compare-playername'
                 ).text(),
-                id: $(
+                id: Number($(
                     '.lineups-compare-right .lineups-compare-player-links a'
                 )
                     .first()
-                    .attrThen('href', getIdAt(2))
+                    .attrThen('href', getIdAt(2)))
             }
         }
         : undefined
@@ -434,7 +434,7 @@ function getHeadToHead($: HLTVPage): HeadToHeadResult[] {
 
             const event = {
                 name: matchEl.find('.event a').text(),
-                id: matchEl.find('.event a').attrThen('href', getIdAt(2))
+                id: Number(matchEl.find('.event a').attrThen('href', getIdAt(2)))
             }
 
             const result = matchEl.find('.result').text()

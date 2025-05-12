@@ -46,7 +46,7 @@ export const getMatchMapStats =
                 ).then(HLTVScraper)
             ])
 
-            const matchId = m$('.match-page-link').attrThen('href', getIdAt(2))!
+            const matchId = Number(m$('.match-page-link').attrThen('href', getIdAt(2)))
             const halfsString = m$('.match-info-row .right').eq(0).text()
 
             const result = {
@@ -69,12 +69,12 @@ export const getMatchMapStats =
             )!
 
             const team1 = {
-                id: m$('.team-left a').attrThen('href', getIdAt(3)),
+                id: Number(m$('.team-left a').attrThen('href', getIdAt(3))),
                 name: m$('.team-left .team-logo').attr('title')
             }
 
             const team2 = {
-                id: m$('.team-right a').attrThen('href', getIdAt(3)),
+                id: Number(m$('.team-right a').attrThen('href', getIdAt(3))),
                 name: m$('.team-right .team-logo').attr('title')
             }
 
@@ -315,7 +315,7 @@ export function getPlayerStats(m$: HLTVPage, p$: HLTVPage) {
 
     const getPlayerOverviewStats = (el: HLTVPageElement) => {
         const id = el.find('.st-player a').attrThen('href', getIdAt(3))!
-        const performanceStats = playerPerformanceStats[id]
+        const performanceStats = playerPerformanceStats[Number(id)]
         const rating = el.find('.st-rating').numFromText()
 
         return {

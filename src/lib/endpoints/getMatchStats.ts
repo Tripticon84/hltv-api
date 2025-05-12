@@ -36,11 +36,11 @@ export const getMatchStats =
                 ).then(HLTVScraper)
             ])
 
-            const matchId = m$('.match-page-link').attrThen('href', getIdAt(2))!
+            const matchId = Number(m$('.match-page-link').attrThen('href', getIdAt(2)))
 
             const mapStatIds = m$('.stats-match-map.inactive')
                 .toArray()
-                .map((el) => el.attrThen('href', getIdAt(4))!)
+                .map((el) => Number(el.attrThen('href', getIdAt(4))))
 
             const result = {
                 team1MapsWon: m$('.team-left .bold').numFromText()!,
@@ -52,12 +52,12 @@ export const getMatchStats =
             )!
 
             const team1 = {
-                id: m$('.team-left a').attrThen('href', getIdAt(3)),
+                id: Number(m$('.team-left a').attrThen('href', getIdAt(3))),
                 name: m$('.team-left .team-logo').attr('title')
             }
 
             const team2 = {
-                id: m$('.team-right a').attrThen('href', getIdAt(3)),
+                id: Number(m$('.team-right a').attrThen('href', getIdAt(3))),
                 name: m$('.team-right .team-logo').attr('title')
             }
 
