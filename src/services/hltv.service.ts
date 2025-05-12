@@ -2,9 +2,11 @@ import HLTV from '../lib';
 
 export class HltvService {
     // Match related methods
-    async getMatches() {
+    async getMatches(params: {
+        selectedDate?: string;
+    }) {
         try {
-            const matches = await HLTV.getMatches();
+            const matches = await HLTV.getMatches(params);
             return matches;
         } catch (error) {
             if (error instanceof Error) {

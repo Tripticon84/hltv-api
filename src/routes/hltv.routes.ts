@@ -14,7 +14,18 @@ const router = Router();
 // Match routes // Fix
 router.get('/matches', async (req: Request, res: Response) => {
     try {
-        const matches = await hltvService.getMatches();
+        const { selectedDate } = req.query;
+
+        if (selectedDate && typeof selectedDate !== 'string') {
+            res.status(400).json({
+                error: 'Invalid date format',
+                timestamp: new Date().toISOString()
+            });
+        };
+
+        const matches = await hltvService.getMatches({
+            selectedDate: selectedDate?.toString()
+        });
         res.json(matches);
     } catch (error) {
         if (error instanceof Error) {

@@ -13,10 +13,7 @@ export enum MatchFilter {
 };
 
 export interface GetMatchesArguments {
-    eventIds?: number[];
-    eventType?: MatchEventType;
-    filter?: MatchFilter;
-    teamIds?: number[];
+    selectedDate?: string;
 };
 
 export interface MatchPreview {
