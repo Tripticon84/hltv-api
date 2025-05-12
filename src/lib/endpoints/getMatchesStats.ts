@@ -64,27 +64,27 @@ export const getMatchesStats =
                     ...$('.matches-table tbody tr')
                         .toArray()
                         .map((el) => {
-                            const mapStatsId = el
+                            const mapStatsId = Number(el
                                 .find('.date-col a')
-                                .attrThen('href', getIdAt(4))!
+                                .attrThen('href', getIdAt(4)))
                             const date = el.find('.time').numFromAttr('data-unix')!
                             const map = fromMapSlug(
                                 el.find('.dynamic-map-name-short').text()
                             )
 
                             const team1 = {
-                                id: el
+                                id: Number(el
                                     .find('.team-col a')
                                     .first()
-                                    .attrThen('href', getIdAt(3)),
+                                    .attrThen('href', getIdAt(3))),
                                 name: el.find('.team-col a').first().text()
                             }
 
                             const team2 = {
-                                id: el
+                                id: Number(el
                                     .find('.team-col a')
                                     .last()
-                                    .attrThen('href', getIdAt(3)),
+                                    .attrThen('href', getIdAt(3))),
                                 name: el.find('.team-col a').last().text()
                             }
 
