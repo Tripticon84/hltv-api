@@ -86,7 +86,7 @@ export const getEvent = (config: HLTVConfig) => {
 
             return {
                 name: el.find('.logo').attr('title'),
-                id: el.find('.team-name a').attrThen('href', getIdAt(2)),
+                id: Number(el.find('.team-name a').attrThen('href', getIdAt(2))),
                 reasonForParticipation: el.find('.sub-text').trimText(),
                 rankDuringEvent: parseNumber(
                     el.find('.event-world-rank').text().replace('#', '')
