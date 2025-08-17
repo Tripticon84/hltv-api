@@ -1,11 +1,11 @@
-import { 
-    Router, 
-    Request, 
+import {
+    Router,
+    Request,
     Response,
-    RequestHandler 
+    RequestHandler
 } from 'express';
 
-import { 
+import {
     hltvService
 } from '../services/hltv.service';
 
@@ -46,18 +46,44 @@ router.get('/matches', async (req: Request, res: Response) => {
     }
 });
 
+router.get('/matches/upcoming', async (req: Request, res: Response) => {
+    try {
+        // Utiliser la date d'aujourd'hui pour récupérer les matches à venir
+        // En cas de problème, on peut utiliser une date spécifique depuis les query params
+        const selectedDate = (req.query.date as string) || new Date().toISOString().split('T')[0]; // Format YYYY-MM-DD
+        const matches = await hltvService.getMatches({
+            selectedDate
+        });
+        // Extraire seulement les matches à venir
+        const upcomingMatches = matches.upcomingMatchesByChampionship;
+        res.json(upcomingMatches);
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).json({
+                error: error.message,
+                timestamp: new Date().toISOString()
+            });
+        } else {
+            res.status(500).json({
+                error: 'An unexpected error occurred',
+                timestamp: new Date().toISOString()
+            });
+        }
+    }
+});
+
 router.get('/matches/:id', async (req: Request, res: Response) => {
     try {
         const match = await hltvService.getMatchById(Number(req.params.id));
         res.json(match);
     } catch (error) {
         if (error instanceof Error) {
-            res.status(500).json({ 
+            res.status(500).json({
                 error: error.message,
                 timestamp: new Date().toISOString()
             });
         } else {
-            res.status(500).json({ 
+            res.status(500).json({
                 error: 'An unexpected error occurred',
                 timestamp: new Date().toISOString()
             });
@@ -74,12 +100,12 @@ router.get('/results', async (req: Request, res: Response) => {
         res.json(results);
     } catch (error) {
         if (error instanceof Error) {
-            res.status(500).json({ 
+            res.status(500).json({
                 error: error.message,
                 timestamp: new Date().toISOString()
             });
         } else {
-            res.status(500).json({ 
+            res.status(500).json({
                 error: 'An unexpected error occurred',
                 timestamp: new Date().toISOString()
             });
@@ -94,12 +120,12 @@ router.get('/teams/:id', async (req: Request, res: Response) => {
         res.json(team);
     } catch (error) {
         if (error instanceof Error) {
-            res.status(500).json({ 
+            res.status(500).json({
                 error: error.message,
                 timestamp: new Date().toISOString()
             });
         } else {
-            res.status(500).json({ 
+            res.status(500).json({
                 error: 'An unexpected error occurred',
                 timestamp: new Date().toISOString()
             });
@@ -113,12 +139,12 @@ router.get('/teams/stats/:id', async (req: Request, res: Response) => {
         res.json(stats);
     } catch (error) {
         if (error instanceof Error) {
-            res.status(500).json({ 
+            res.status(500).json({
                 error: error.message,
                 timestamp: new Date().toISOString()
             });
         } else {
-            res.status(500).json({ 
+            res.status(500).json({
                 error: 'An unexpected error occurred',
                 timestamp: new Date().toISOString()
             });
@@ -132,12 +158,12 @@ router.get('/teams/name/:name', async (req: Request, res: Response) => {
         res.json(team);
     } catch (error) {
         if (error instanceof Error) {
-            res.status(500).json({ 
+            res.status(500).json({
                 error: error.message,
                 timestamp: new Date().toISOString()
             });
         } else {
-            res.status(500).json({ 
+            res.status(500).json({
                 error: 'An unexpected error occurred',
                 timestamp: new Date().toISOString()
             });
@@ -152,12 +178,12 @@ router.get('/players/:id', async (req: Request, res: Response) => {
         res.json(player);
     } catch (error) {
         if (error instanceof Error) {
-            res.status(500).json({ 
+            res.status(500).json({
                 error: error.message,
                 timestamp: new Date().toISOString()
             });
         } else {
-            res.status(500).json({ 
+            res.status(500).json({
                 error: 'An unexpected error occurred',
                 timestamp: new Date().toISOString()
             });
@@ -171,12 +197,12 @@ router.get('/players/stats/:id', async (req: Request, res: Response) => {
         res.json(stats);
     } catch (error) {
         if (error instanceof Error) {
-            res.status(500).json({ 
+            res.status(500).json({
                 error: error.message,
                 timestamp: new Date().toISOString()
             });
         } else {
-            res.status(500).json({ 
+            res.status(500).json({
                 error: 'An unexpected error occurred',
                 timestamp: new Date().toISOString()
             });
@@ -191,12 +217,12 @@ router.get('/events/:id', async (req: Request, res: Response) => {
         res.json(event);
     } catch (error) {
         if (error instanceof Error) {
-            res.status(500).json({ 
+            res.status(500).json({
                 error: error.message,
                 timestamp: new Date().toISOString()
             });
         } else {
-            res.status(500).json({ 
+            res.status(500).json({
                 error: 'An unexpected error occurred',
                 timestamp: new Date().toISOString()
             });
@@ -210,12 +236,12 @@ router.get('/events', async (req: Request, res: Response) => {
         res.json(events);
     } catch (error) {
         if (error instanceof Error) {
-            res.status(500).json({ 
+            res.status(500).json({
                 error: error.message,
                 timestamp: new Date().toISOString()
             });
         } else {
-            res.status(500).json({ 
+            res.status(500).json({
                 error: 'An unexpected error occurred',
                 timestamp: new Date().toISOString()
             });
@@ -227,11 +253,11 @@ router.get('/events', async (req: Request, res: Response) => {
 router.get('/news', (async (req: Request, res: Response) => {
     try {
         const { year, month, eventIds } = req.query;
-        
+
         const yearNumber = year ? Number(year) : undefined;
-        
-        const eventIdsArray = eventIds 
-            ? (Array.isArray(eventIds) 
+
+        const eventIdsArray = eventIds
+            ? (Array.isArray(eventIds)
                 ? eventIds.map(id => Number(id))
                 : [Number(eventIds)])
             : undefined;
@@ -263,16 +289,16 @@ router.get('/news', (async (req: Request, res: Response) => {
             month: month?.toString().toLowerCase() as any,
             eventIds: eventIdsArray
         });
-        
+
         res.json(news);
     } catch (error) {
         if (error instanceof Error) {
-            res.status(500).json({ 
+            res.status(500).json({
                 error: error.message,
                 timestamp: new Date().toISOString()
             });
         } else {
-            res.status(500).json({ 
+            res.status(500).json({
                 error: 'An unexpected error occurred',
                 timestamp: new Date().toISOString()
             });
@@ -284,7 +310,7 @@ router.get('/news', (async (req: Request, res: Response) => {
 router.get('/ranking/teams', (async (req: Request, res: Response) => {
     try {
         const { year, month, day } = req.query;
-        
+
         const yearNumber = year ? Number(year) : undefined;
         const dayNumber = day ? Number(day) : undefined;
 
@@ -314,16 +340,16 @@ router.get('/ranking/teams', (async (req: Request, res: Response) => {
             month: month?.toString().toLowerCase() as any,
             day: dayNumber
         });
-        
+
         res.json(ranking);
     } catch (error) {
         if (error instanceof Error) {
-            res.status(500).json({ 
+            res.status(500).json({
                 error: error.message,
                 timestamp: new Date().toISOString()
             });
         } else {
-            res.status(500).json({ 
+            res.status(500).json({
                 error: 'An unexpected error occurred',
                 timestamp: new Date().toISOString()
             });
@@ -333,15 +359,15 @@ router.get('/ranking/teams', (async (req: Request, res: Response) => {
 
 router.get('/ranking/players', (async (req: Request, res: Response) => {
     try {
-        const { 
-            startDate, 
-            endDate, 
-            matchType, 
-            rankingFilter, 
-            maps, 
-            minMapCount, 
-            countries, 
-            bestOfX 
+        const {
+            startDate,
+            endDate,
+            matchType,
+            rankingFilter,
+            maps,
+            minMapCount,
+            countries,
+            bestOfX
         } = req.query;
 
         const mapsArray = maps ? (Array.isArray(maps) ? maps : [maps]).map(map => map.toString()) : undefined;
@@ -357,16 +383,16 @@ router.get('/ranking/players', (async (req: Request, res: Response) => {
             countries: countriesArray,
             bestOfX: bestOfX?.toString() as any
         });
-        
+
         res.json(ranking);
     } catch (error) {
         if (error instanceof Error) {
-            res.status(500).json({ 
+            res.status(500).json({
                 error: error.message,
                 timestamp: new Date().toISOString()
             });
         } else {
-            res.status(500).json({ 
+            res.status(500).json({
                 error: 'An unexpected error occurred',
                 timestamp: new Date().toISOString()
             });
@@ -374,4 +400,4 @@ router.get('/ranking/players', (async (req: Request, res: Response) => {
     }
 }) as RequestHandler);
 
-export default router; 
+export default router;
