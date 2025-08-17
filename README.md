@@ -2,7 +2,37 @@
 
 A robust RESTful API wrapper built with Express.js and TypeScript to provide structured access to CS:GO match data via HLTV, including statistics, teams, players, and event insights.
 
-## 👀 Features
+## � Quick Start
+
+### Development
+```bash
+# Install dependencies
+pnpm install
+
+# Run in development mode
+pnpm dev
+```
+
+### Production
+```bash
+# Build the project
+pnpm build
+
+# Start the server
+pnpm start
+```
+
+### Docker 🐳
+```bash
+# Build and run with Docker
+docker build -t hltv-api .
+docker run -d -p 3000:3000 --name hltv-api-container hltv-api
+
+# Or use Docker Compose
+docker-compose up -d
+```
+
+## �👀 Features
 
 - Match results and statistics
 - Team and player information
