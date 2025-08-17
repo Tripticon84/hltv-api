@@ -2,9 +2,10 @@
 
 A robust RESTful API wrapper built with Express.js and TypeScript to provide structured access to CS:GO match data via HLTV, including statistics, teams, players, and event insights.
 
-## � Quick Start
+## Quick Start
 
 ### Development
+
 ```bash
 # Install dependencies
 pnpm install
@@ -14,6 +15,7 @@ pnpm dev
 ```
 
 ### Production
+
 ```bash
 # Build the project
 pnpm build
@@ -23,6 +25,7 @@ pnpm start
 ```
 
 ### Docker 🐳
+
 ```bash
 # Build and run with Docker
 docker build -t hltv-api .
@@ -32,7 +35,7 @@ docker run -d -p 3000:3000 --name hltv-api-container hltv-api
 docker-compose up -d
 ```
 
-## �👀 Features
+## 👀 Features
 
 - Match results and statistics
 - Team and player information
@@ -84,12 +87,14 @@ hltv-api/
 ## 🐱‍👤 Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/yourusername/hltv-api.git
 cd hltv-api
 ```
 
 2. Install dependencies:
+
 ```bash
 yarn install
 # or
@@ -112,17 +117,20 @@ pnpm dev
 
 The server will start on the default port (check your environment variables).
 
-## 🔌 API Endpoints
+## 🔌API Endpoints
 
 ### Match Endpoints
 
 #### GET /matches
+
 Retrieves all matches.
 
 **Query Parameters:**
+
 - `selectedDate`: Date in YYYY-MM-DD format (optional)
 
 **Response:**
+
 ```json
 {
   "liveMatches": [
@@ -173,12 +181,15 @@ Retrieves all matches.
 ```
 
 #### GET /matches/:id
+
 Retrieves a specific match by ID.
 
 **Parameters:**
+
 - `id`: Match ID (path parameter, required)
 
 **Response:**
+
 ```json
 {
   "id": 12345,
@@ -210,12 +221,15 @@ Retrieves a specific match by ID.
 ```
 
 #### GET /matches/upcoming
+
 Retrieves upcoming matches.
 
 **Query Parameters:**
+
 - `limit`: Number of matches to return (optional, default: 10, type: number)
 
 **Response:**
+
 ```json
 {
   "matches": [
@@ -232,9 +246,11 @@ Retrieves upcoming matches.
 ```
 
 #### GET /matches/live
+
 Retrieves currently live matches.
 
 **Response:**
+
 ```json
 {
   "matches": [
@@ -259,12 +275,15 @@ Retrieves currently live matches.
 ```
 
 #### GET /matches/:id/stats
+
 Retrieves detailed statistics for a specific match.
 
 **Parameters:**
+
 - `id`: Match ID (path parameter, required)
 
 **Response:**
+
 ```json
 {
   "matchId": 12345,
@@ -296,9 +315,11 @@ Retrieves detailed statistics for a specific match.
 ### Results Endpoint
 
 #### GET /results
+
 Retrieves match results with filtering options.
 
 **Required Query Parameters:**
+
 - `eventIds`: Array of event IDs to filter matches (type: number[])
 - `bestOfX`: Number of maps in the match (type: number, e.g., 1, 3, 5)
 
@@ -307,6 +328,7 @@ Retrieves match results with filtering options.
 GET /results?eventIds=[123,456]&bestOfX=3
 
 **Response:**
+
 ```json
 {
   "results": [
@@ -342,12 +364,15 @@ GET /results?eventIds=[123,456]&bestOfX=3
 ### Team Endpoints
 
 #### GET /teams/:id
+
 Retrieves team information by ID.
 
 **Parameters:**
+
 - `id`: Team ID (path parameter, required)
 
 **Response:**
+
 ```json
 {
   "id": 1,
@@ -366,12 +391,15 @@ Retrieves team information by ID.
 ```
 
 #### GET /teams/stats/:id
+
 Retrieves team statistics.
 
 **Parameters:**
+
 - `id`: Team ID (path parameter, required)
 
 **Response:**
+
 ```json
 {
   "teamId": 1,
@@ -390,12 +418,15 @@ Retrieves team statistics.
 ```
 
 #### GET /teams/name/:name
+
 Retrieves team information by name.
 
 **Parameters:**
+
 - `name`: Team name (path parameter, required)
 
 **Response:**
+
 ```json
 {
   "id": 1,
@@ -407,12 +438,15 @@ Retrieves team information by name.
 ```
 
 #### GET /teams/search
+
 Searches teams by name.
 
 **Required Query Parameters:**
+
 - `query`: Search term (type: string)
 
 **Response:**
+
 ```json
 {
   "teams": [
@@ -427,13 +461,16 @@ Searches teams by name.
 ```
 
 #### GET /teams/:team1Id/vs/:team2Id
+
 Retrieves head-to-head statistics between two teams.
 
 **Parameters:**
+
 - `team1Id`: First team ID (path parameter, required)
 - `team2Id`: Second team ID (path parameter, required)
 
 **Response:**
+
 ```json
 {
   "team1": {
@@ -461,12 +498,15 @@ Retrieves head-to-head statistics between two teams.
 ### Player Endpoints
 
 #### GET /players/:id
+
 Retrieves player information by ID.
 
 **Parameters:**
+
 - `id`: Player ID (path parameter, required)
 
 **Response:**
+
 ```json
 {
   "id": 1,
@@ -483,12 +523,15 @@ Retrieves player information by ID.
 ```
 
 #### GET /players/stats/:id
+
 Retrieves player statistics.
 
 **Parameters:**
+
 - `id`: Player ID (path parameter, required)
 
 **Response:**
+
 ```json
 {
   "playerId": 1,
@@ -509,12 +552,15 @@ Retrieves player statistics.
 ```
 
 #### GET /players/search
+
 Searches players by name.
 
 **Required Query Parameters:**
+
 - `query`: Search term (type: string)
 
 **Response:**
+
 ```json
 {
   "players": [
@@ -531,9 +577,11 @@ Searches players by name.
 ### Event Endpoints
 
 #### GET /events
+
 Retrieves all events.
 
 **Response:**
+
 ```json
 {
   "events": [
@@ -550,12 +598,15 @@ Retrieves all events.
 ```
 
 #### GET /events/:id
+
 Retrieves event information by ID.
 
 **Parameters:**
+
 - `id`: Event ID (path parameter, required)
 
 **Response:**
+
 ```json
 {
   "id": 100,
@@ -576,12 +627,15 @@ Retrieves event information by ID.
 ```
 
 #### GET /events/upcoming
+
 Retrieves upcoming events.
 
 **Query Parameters:**
+
 - `limit`: Number of events to return (optional, default: 10, type: number)
 
 **Response:**
+
 ```json
 {
   "events": [
@@ -600,9 +654,11 @@ Retrieves upcoming events.
 ### News Endpoint
 
 #### GET /news
+
 Retrieves latest news articles.
 
 **Response:**
+
 ```json
 {
   "articles": [
@@ -620,9 +676,11 @@ Retrieves latest news articles.
 ### Ranking Endpoints
 
 #### GET /ranking/teams
+
 Retrieves team rankings.
 
 **Response:**
+
 ```json
 {
   "rankings": [
@@ -639,9 +697,11 @@ Retrieves team rankings.
 ```
 
 #### GET /ranking/players
+
 Retrieves player rankings.
 
 **Response:**
+
 ```json
 {
   "rankings": [
@@ -665,6 +725,7 @@ The API returns appropriate HTTP status codes and error messages:
 - `500 Internal Server Error`: Server-side errors with detailed messages
 
 Error responses include a timestamp and descriptive message:
+
 ```json
 {
   "error": "Error message",
