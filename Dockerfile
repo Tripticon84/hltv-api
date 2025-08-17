@@ -7,6 +7,8 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     procps \
     libxss1 \
+    libnss3 \
+    libnspr4 \
     libgconf-2-4 \
     libxrandr2 \
     libasound2 \
